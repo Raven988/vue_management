@@ -1,6 +1,12 @@
 <template>
   <div class="sidebar">
-    <button @click="toggleFilter('teachers')" class="sidebar-btn">Преподаватели</button>
+    <button
+      @click="toggleFilter('teachers')"
+      :class="{ 'transparent-btn': !filters.teachers }"
+      class="sidebar-btn"
+    >
+      Преподаватели
+    </button>
 
     <div v-show="filters.teachers" class="filter-content">
       <button @click="toggleFilter('department')" class="sidebar-btn">Кафедра</button>
@@ -9,11 +15,6 @@
         <input type="checkbox" /> Кафедра 2<br />
         <input type="checkbox" /> Кафедра 3<br />
         <input type="checkbox" /> Кафедра 4<br />
-        <input type="checkbox" /> Кафедра 5<br />
-        <input type="checkbox" /> Кафедра 6<br />
-        <input type="checkbox" /> Кафедра 7<br />
-        <input type="checkbox" /> Кафедра 8<br />
-        <input type="checkbox" /> Кафедра 9<br />
       </div>
       <button @click="toggleFilter('subject')" class="sidebar-btn">Предмет</button>
       <div v-show="filters.subject" class="filter">
@@ -21,11 +22,6 @@
         <input type="checkbox" /> Предмет 2<br />
         <input type="checkbox" /> Предмет 3<br />
         <input type="checkbox" /> Предмет 4<br />
-        <input type="checkbox" /> Предмет 5<br />
-        <input type="checkbox" /> Предмет 6<br />
-        <input type="checkbox" /> Предмет 7<br />
-        <input type="checkbox" /> Предмет 8<br />
-        <input type="checkbox" /> Предмет 9<br />
       </div>
       <button @click="toggleFilter('groups')" class="sidebar-btn">Группы</button>
       <div v-show="filters.groups" class="filter">
@@ -33,11 +29,6 @@
         <input type="checkbox" /> Группа 2<br />
         <input type="checkbox" /> Группа 3<br />
         <input type="checkbox" /> Группа 4<br />
-        <input type="checkbox" /> Группа 5<br />
-        <input type="checkbox" /> Группа 6<br />
-        <input type="checkbox" /> Группа 7<br />
-        <input type="checkbox" /> Группа 8<br />
-        <input type="checkbox" /> Группа 9<br />
       </div>
       <input class="input_text" type="text" placeholder="Имя" />
       <input class="input_text" type="text" placeholder="Фамилия" />
@@ -45,7 +36,13 @@
       <button class="sidebar-btn-accept">Применить</button>
     </div>
 
-    <button @click="toggleFilter('students')" class="sidebar-btn">Студенты</button>
+    <button
+      @click="toggleFilter('students')"
+      :class="{ 'transparent-btn': !filters.students }"
+      class="sidebar-btn"
+    >
+      Студенты
+    </button>
 
     <div v-show="filters.students" class="filter-content">
       <button @click="toggleFilter('department')" class="sidebar-btn">Кафедра</button>
@@ -54,11 +51,6 @@
         <input type="checkbox" /> Кафедра 2<br />
         <input type="checkbox" /> Кафедра 3<br />
         <input type="checkbox" /> Кафедра 4<br />
-        <input type="checkbox" /> Кафедра 5<br />
-        <input type="checkbox" /> Кафедра 6<br />
-        <input type="checkbox" /> Кафедра 7<br />
-        <input type="checkbox" /> Кафедра 8<br />
-        <input type="checkbox" /> Кафедра 9<br />
       </div>
       <button @click="toggleFilter('groups')" class="sidebar-btn">Группа</button>
       <div v-show="filters.groups" id="groups-filter" class="filter">
@@ -66,11 +58,6 @@
         <input type="checkbox" /> Группа 2<br />
         <input type="checkbox" /> Группа 3<br />
         <input type="checkbox" /> Группа 4<br />
-        <input type="checkbox" /> Группа 5<br />
-        <input type="checkbox" /> Группа 6<br />
-        <input type="checkbox" /> Группа 7<br />
-        <input type="checkbox" /> Группа 8<br />
-        <input type="checkbox" /> Группа 9<br />
       </div>
       <input class="input_text" type="text" placeholder="Имя" />
       <input class="input_text" type="text" placeholder="Фамилия" />
@@ -80,36 +67,30 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      filters: {
-        teachers: false,
-        students: false,
-        department: false,
-        subject: false,
-        groups: false
-      }
-    }
-  },
-  methods: {
-    toggleFilter(filterId) {
-      console.log(filterId)
-      if (filterId === 'teachers') {
-        this.filters.students = false
-        this.filters.department = false
-        this.filters.subject = false
-        this.filters.groups = false
-      } else if (filterId === 'students') {
-        this.filters.teachers = false
-        this.filters.department = false
-        this.filters.subject = false
-        this.filters.groups = false
-      }
-      this.filters[filterId] = !this.filters[filterId]
-    }
+<script setup>
+import { ref } from 'vue'
+
+const filters = ref({
+  teachers: false,
+  students: false,
+  department: false,
+  subject: false,
+  groups: false
+})
+
+function toggleFilter(filterId) {
+  if (filterId === 'teachers') {
+    filters.value.students = false
+    filters.value.department = false
+    filters.value.subject = false
+    filters.value.groups = false
+  } else if (filterId === 'students') {
+    filters.value.teachers = false
+    filters.value.department = false
+    filters.value.subject = false
+    filters.value.groups = false
   }
+  filters.value[filterId] = !filters.value[filterId]
 }
 </script>
 
@@ -123,6 +104,7 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .sidebar-btn,
 .sidebar-btn-accept {
   min-height: 33px;
@@ -134,9 +116,11 @@ export default {
   border-radius: 10px;
   text-align: left;
   float: right;
+  transition: transform 0.2s ease-in-out;
 }
+
 .sidebar-btn-accept {
-  background-color: #4caf50;
+  background-color: green;
   text-align: center;
   color: white;
   border: 1px solid black;
@@ -158,5 +142,12 @@ export default {
   border-radius: 10px;
   float: right;
   margin-top: 4px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.input_text:hover,
+.sidebar-btn-accept:hover,
+.sidebar-btn:hover {
+  transform: translateY(-2px);
 }
 </style>

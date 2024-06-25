@@ -2,11 +2,21 @@
   <div class="header">
     <input type="text" placeholder="Поиск..." />
     <div class="header-button">
-      <button class="red">Уволить</button>
-      <button class="green">Нанять</button>
+      <button disabled class="red">Уволить</button>
+      <button @click="goToCard" class="green">Нанять</button>
     </div>
   </div>
 </template>
+
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+function goToCard() {
+  router.push('/card')
+}
+</script>
 
 <style scoped>
 .header {
@@ -15,6 +25,7 @@
   justify-content: space-between;
   border-bottom: 1px solid #ccc;
 }
+
 .header input[type='text'] {
   height: 24px;
   width: 405px;
@@ -23,13 +34,16 @@
   font-size: 16px;
   margin-left: 64px;
   margin-top: 70px;
+  transition: transform 0.2s ease-in-out;
 }
+
 .header-button {
   height: 56px;
   width: 300px;
   margin-right: 19px;
   margin-top: 62px;
 }
+
 .red,
 .green {
   font-size: 16px;
@@ -40,11 +54,25 @@
   border-radius: 10px;
   color: white;
   border: 1px solid black;
+  transition: transform 0.2s ease-in-out;
 }
-.red {
-  background-color: #ff4d4d;
-}
+
 .green {
-  background-color: #4caf50;
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.red:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.header input:hover,
+.green:hover,
+.red:hover {
+  transform: translateY(-2px);
 }
 </style>
