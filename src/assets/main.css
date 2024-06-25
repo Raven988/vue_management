@@ -1,0 +1,19 @@
+#app {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  min-height: 100vh;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+.main_content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
