@@ -1,4 +1,4 @@
-import TeacherCard from '@/components/TeacherCard.vue'
+import PersonalCard from '@/components/PersonalCard.vue'
 import MainTable from '@/pages/TablePage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -10,8 +10,8 @@ const routes = [
   },
   {
     path: '/card',
-    name: 'TeacherCard',
-    component: TeacherCard
+    name: 'PersonalCard',
+    component: PersonalCard
   }
 ]
 

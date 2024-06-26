@@ -1,0 +1,15 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 20px;
+  overflow-y: auto;
+}
+th,
+td {
+  padding: 5px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+td:nth-child(2) {
+  text-align: left;
+}
