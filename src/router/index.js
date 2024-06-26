@@ -1,12 +1,12 @@
 import PersonalCard from '@/components/PersonalCard.vue'
-import MainTable from '@/pages/TablePage.vue'
+import TablePage from '@/pages/TablePage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
     path: '/',
-    name: 'MainTable',
-    component: MainTable
+    name: 'TablePage',
+    component: TablePage
   },
   {
     path: '/card',

@@ -95,7 +95,7 @@ function onFileChange(event) {
 }
 
 function cancel() {
-  router.push({ name: 'MainTable' })
+  router.push({ name: 'TablePage' })
 }
 
 function submitForm() {
@@ -109,11 +109,11 @@ function submitForm() {
     formData.append('image', teacher.value.image)
   }
   console.log('Форма отправлена', teacher.value)
-  router.push({ name: 'MainTable' })
+  router.push({ name: 'TablePage' })
   // axios.post('/api/teachers', formData)
   //   .then(response => {
   //     console.log('Данные успешно сохранены', response.data);
-  //     router.push({ name: 'MainTable' });
+  //     router.push({ name: 'TablePage' });
   //   })
   //   .catch(error => {
   //     console.error('Ошибка при сохранении данных', error);
