@@ -1,44 +1,30 @@
 <template>
-  <div class="teacher_card">
+  <div class="person_card">
     <h2 class="lable">Личная карточка</h2>
-    <div class="middle">
-      <div class="photo">
+    <div class="form-container">
+      <div :class="['photo', { error: errors.photo }]">
         <img :src="imageUrl" v-if="imageUrl" class="preview" />
         <input type="file" @change="onFileChange" class="file-input" />
       </div>
-      <div class="department">
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Кафедра</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="department in departments" :key="department">
-              <td><input type="checkbox" :value="department" v-model="teacher.department" /></td>
-              <td>{{ department }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div :class="['form-group', { error: errors.last_name }]">
+        <label class="form-label">Фамилия:</label>
+        <input type="text" id="last_name" v-model="teacher.last_name" class="form-input" />
       </div>
-    </div>
-    <div class="form-container">
-      <div class="form-group">
-        <label for="lastName" class="form-label">Фамилия:</label>
-        <input type="text" id="lastName" v-model="teacher.lastName" class="form-input" />
+      <div :class="['form-group', { error: errors.first_name }]">
+        <label class="form-label">Имя:</label>
+        <input type="text" id="first_name" v-model="teacher.first_name" class="form-input" />
       </div>
-      <div class="form-group">
-        <label for="firstName" class="form-label">Имя:</label>
-        <input type="text" id="firstName" v-model="teacher.firstName" class="form-input" />
+      <div :class="['form-group', { error: errors.birth_date }]">
+        <label class="form-label">Дата рождения:</label>
+        <input type="date" id="birth_date" v-model="teacher.birth_date" class="form-input" />
       </div>
-      <div class="form-group">
-        <label for="middleName" class="form-label">Отчество:</label>
-        <input type="text" id="middleName" v-model="teacher.middleName" class="form-input" />
-      </div>
-      <div class="form-group">
-        <label for="birthDate" class="form-label">Дата рождения:</label>
-        <input type="date" id="birthDate" v-model="teacher.birthDate" class="form-input" />
+      <div :class="['form-group', { error: errors.department_name }]">
+        <label class="form-label">Кафедра:</label>
+        <select class="form-input" v-model="teacher.department_name">
+          <option v-for="department in departments" :key="department" :value="department.name">
+            {{ department.name }}
+          </option>
+        </select>
       </div>
       <div class="form-buttons">
         <button @click="submitForm" class="form-btn">Применить</button>
@@ -49,36 +35,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 import '../assets/styles/card.css'
 
 const router = useRouter()
-
 const imageUrl = ref('/src/assets/image/non_photo.png')
-
-const teacher = ref({
-  lastName: '',
-  firstName: '',
-  middleName: '',
-  birthDate: '',
-  department: [],
-  image: null
-})
-
-const departments = [
-  'Кафедра кибербезопасности',
-  'Кафедра прикладной информатики',
-  'Кафедра общей физики',
-  'Кафедра теоретической физики',
-  'Кафедра экспериментальной физики',
-  'Кафедра математического анализа',
-  'Кафедра психологии',
-  'Кафедра конфликтологии',
-  'Кафедра религиоведения',
-  'Кафедра истории и теории культуры',
-  'Кафедра этики и эстетики'
-]
+const departments = ref([])
 
 function onFileChange(event) {
   const file = event.target.files[0]
@@ -86,11 +50,66 @@ function onFileChange(event) {
     const reader = new FileReader()
     reader.onload = (e) => {
       imageUrl.value = e.target.result
+      teacher.value.photo = e.target.result.split(',')[1]
     }
     reader.readAsDataURL(file)
-    teacher.value.image = file
   } else {
     imageUrl.value = '/src/assets/image/non_photo.png'
+  }
+}
+
+const teacher = ref({
+  last_name: '',
+  first_name: '',
+  birth_date: '',
+  department_name: '',
+  photo: null
+})
+
+const errors = ref({})
+
+function validateForm() {
+  errors.value = {}
+  if (!teacher.value.photo) {
+    errors.value.photo = true
+  }
+  if (!teacher.value.last_name) {
+    errors.value.last_name = true
+  }
+  if (!teacher.value.first_name) {
+    errors.value.first_name = true
+  }
+  if (!teacher.value.birth_date) {
+    errors.value.birth_date = true
+  }
+  if (!teacher.value.department_name) {
+    errors.value.department_name = true
+  }
+  return Object.keys(errors.value).length === 0
+}
+async function submitForm() {
+  if (!validateForm()) {
+    return
+  }
+
+  const payload = {
+    last_name: teacher.value.last_name,
+    first_name: teacher.value.first_name,
+    birth_date: teacher.value.birth_date,
+    department_name: teacher.value.department_name,
+    photo: teacher.value.photo
+  }
+
+  try {
+    const response = await axios.post('http://127.0.0.1:8000/instructors/', payload, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log('Данные успешно сохранены', response.data)
+    router.push({ name: 'TablePage' })
+  } catch (error) {
+    console.error(error)
   }
 }
 
@@ -98,25 +117,18 @@ function cancel() {
   router.push({ name: 'TablePage' })
 }
 
-function submitForm() {
-  const formData = new FormData()
-  formData.append('lastName', teacher.value.lastName)
-  formData.append('firstName', teacher.value.firstName)
-  formData.append('middleName', teacher.value.middleName)
-  formData.append('birthDate', teacher.value.birthDate)
-  formData.append('department', JSON.stringify(teacher.value.department))
-  if (teacher.value.image) {
-    formData.append('image', teacher.value.image)
+async function fetchFiltersData() {
+  try {
+    const [departmentsResponse] = await Promise.all([
+      axios.get('http://127.0.0.1:8000/departments/')
+    ])
+    departments.value = departmentsResponse.data
+  } catch (error) {
+    console.error(error)
   }
-  console.log('Форма отправлена', teacher.value)
-  router.push({ name: 'TablePage' })
-  // axios.post('/api/teachers', formData)
-  //   .then(response => {
-  //     console.log('Данные успешно сохранены', response.data);
-  //     router.push({ name: 'TablePage' });
-  //   })
-  //   .catch(error => {
-  //     console.error('Ошибка при сохранении данных', error);
-  //   });
 }
+
+onMounted(() => {
+  fetchFiltersData()
+})
 </script>
