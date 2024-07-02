@@ -2,7 +2,7 @@
   height: 134px;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #ccc;
+  margin: 10px;
 }
 .header input[type='text'] {
   height: 24px;
@@ -13,6 +13,8 @@
   margin-left: 64px;
   margin-top: 70px;
   transition: transform 0.2s ease-in-out;
+  border: 0px solid black;
+  box-shadow: 0 0 10px #494848;
 }
 .header-button {
   height: 56px;
@@ -29,7 +31,8 @@
   cursor: pointer;
   border-radius: 10px;
   color: white;
-  border: 1px solid black;
+  border: 0px solid black;
+  box-shadow: 0 0 10px #494848;
   transition: transform 0.2s ease-in-out;
 }
 .green {
@@ -39,6 +42,8 @@
   background-color: red;
 }
 .red:disabled {
+  background-color: white;
+  color: black;
   opacity: 0.5;
   cursor: not-allowed;
 }

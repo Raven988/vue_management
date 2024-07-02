@@ -1,3 +1,16 @@
+.MainTable {
+  height: 75%;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  margin: 10px;
+  box-shadow: 0 0 10px #494848;
+}
+.custom-header {
+  position: sticky;
+  top: 0;
+  background-color: #509ffa;
+  color: white;
+}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -6,10 +19,13 @@ table {
 }
 th,
 td {
-  padding: 5px;
+  padding: 10px;
   text-align: center;
   border-bottom: 1px solid #ddd;
 }
-td:nth-child(2) {
-  text-align: left;
+table tbody tr {
+  cursor: pointer;
+}
+table tbody tr:hover {
+  background-color: #f0f0f0;
 }

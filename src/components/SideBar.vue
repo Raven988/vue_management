@@ -1,29 +1,25 @@
 <template>
   <div class="sidebar">
     <button
-      @click="toggleFilter('teachers')"
-      :class="{ 'transparent-btn': !filters.teachers }"
+      @click="toggleFilter('instructors')"
+      :class="{ 'transparent-btn': !filters.instructors }"
       class="sidebar-btn"
     >
       Преподаватели
     </button>
-    <div v-show="filters.teachers" class="filter-content">
+    <div v-show="filters.instructors" class="filter-content">
       <button @click="toggleFilter('department')" class="sidebar-btn">Кафедра</button>
       <div v-show="filters.department" class="filter">
-        <div v-for="department in departments" :key="department.id">
-          <input type="checkbox" :value="department.name" /> {{ department.name }}<br />
+        <div v-for="department in departments.departments" :key="department.id">
+          <input v-model="selectedDepartments" type="checkbox" :value="department" />
+          {{ department }}<br />
         </div>
       </div>
-      <button @click="toggleFilter('groups')" class="sidebar-btn">Группы</button>
-      <div v-show="filters.groups" class="filter">
-        <div v-for="group in groups" :key="group.id">
-          <input type="checkbox" :value="group.name" /> {{ group.name }}<br />
-        </div>
-      </div>
-      <input class="input_text" type="text" placeholder="Имя" />
-      <input class="input_text" type="text" placeholder="Фамилия" />
-      <input class="input_text" type="text" placeholder="Отчество" />
-      <button class="sidebar-btn-accept">Применить</button>
+      <button @click="toggleFilter('group')" class="sidebar-btn">Группы</button>
+      <div v-show="filters.group" class="filter"></div>
+      <input v-model="firstName" class="input_text" type="text" placeholder="Имя" />
+      <input v-model="lastName" class="input_text" type="text" placeholder="Фамилия" />
+      <button @click="filterPersons('instructors')" class="sidebar-btn-accept">Применить</button>
     </div>
 
     <button
@@ -33,72 +29,69 @@
     >
       Студенты
     </button>
-
     <div v-show="filters.students" class="filter-content">
       <button @click="toggleFilter('department')" class="sidebar-btn">Кафедра</button>
       <div v-show="filters.department" class="filter">
-        <input type="checkbox" /> Кафедра 1<br />
-        <input type="checkbox" /> Кафедра 2<br />
-        <input type="checkbox" /> Кафедра 3<br />
-        <input type="checkbox" /> Кафедра 4<br />
+        <div v-for="department in departments.departments" :key="department.id">
+          <input v-model="selectedDepartments" type="checkbox" :value="department" /> {{ department
+          }}<br />
+        </div>
       </div>
-      <button @click="toggleFilter('groups')" class="sidebar-btn">Группа</button>
-      <div v-show="filters.groups" id="groups-filter" class="filter">
-        <input type="checkbox" /> Группа 1<br />
-        <input type="checkbox" /> Группа 2<br />
-        <input type="checkbox" /> Группа 3<br />
-        <input type="checkbox" /> Группа 4<br />
-      </div>
-      <input class="input_text" type="text" placeholder="Имя" />
-      <input class="input_text" type="text" placeholder="Фамилия" />
-      <input class="input_text" type="text" placeholder="Отчество" />
-      <button class="sidebar-btn-accept">Применить</button>
+      <button @click="toggleFilter('group')" class="sidebar-btn">Группа</button>
+      <div v-show="filters.group" class="filter"></div>
+      <input v-model="firstName" class="input_text" type="text" placeholder="Имя" />
+      <input v-model="lastName" class="input_text" type="text" placeholder="Фамилия" />
+      <button @click="filterPersons('students')" class="sidebar-btn-accept">Применить</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
 import '../assets/styles/sidebar.css'
+import { ref, inject } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const departments = inject('departments')
 
 const filters = ref({
-  teachers: false,
+  instructors: false,
   students: false,
   department: false,
-  groups: false
+  group: false
 })
 
-const departments = ref([])
-const groups = ref([])
-
 function toggleFilter(filterId) {
-  if (filterId === 'teachers') {
+  if (filterId === 'instructors') {
+    clearFilters()
     filters.value.students = false
-    filters.value.department = false
-    filters.value.groups = false
+    router.push({ name: 'Instructors' })
   } else if (filterId === 'students') {
-    filters.value.teachers = false
-    filters.value.department = false
-    filters.value.groups = false
+    clearFilters()
+    filters.value.instructors = false
+    router.push({ name: 'Students' })
   }
   filters.value[filterId] = !filters.value[filterId]
 }
-async function fetchFiltersData() {
-  try {
-    // const [departmentsResponse, groupsResponse] = await Promise.all([
-    const [departmentsResponse] = await Promise.all([
-      axios.get('http://127.0.0.1:8000/departments/')
-      // axios.get('http://127.0.0.1:8000/groups/')
-    ])
-    departments.value = departmentsResponse.data
-    // groups.value = groupsResponse.data
-  } catch (error) {
-    console.error('Error fetching filter data:', error)
-  }
+function clearFilters() {
+  filters.value.department = false
+  filters.value.group = false
+  selectedDepartments.value = []
+  firstName.value = ''
+  lastName.value = ''
 }
 
-onMounted(() => {
-  fetchFiltersData()
-})
+const selectedDepartments = ref([])
+const firstName = ref('')
+const lastName = ref('')
+const fetchPersonsData = inject('fetchPersonsData')
+function filterPersons(filterId) {
+  const query = {
+    departments: selectedDepartments.value,
+    firstName: firstName.value,
+    lastName: lastName.value
+  }
+  fetchPersonsData(filterId, query)
+}
 </script>

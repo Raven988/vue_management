@@ -20,23 +20,24 @@
   text-align: left;
   float: right;
   transition: transform 0.2s ease-in-out;
+  box-shadow: 0 0 10px #494848;
 }
 
 .sidebar-btn-accept {
   background-color: green;
   text-align: center;
   color: white;
-  border: 1px solid black;
 }
 
 .filter {
-  max-height: 100px;
+  max-height: 200px;
   width: 150px;
-  border: 1px solid #7e7d7d;
+  border: 1px solid black;
   overflow-y: scroll;
   padding: 10px;
   float: right;
   font-size: small;
+  border-radius: 10px;
 }
 
 .input_text {
@@ -46,6 +47,7 @@
   float: right;
   margin-top: 4px;
   transition: transform 0.2s ease-in-out;
+  box-shadow: 0 0 10px #494848;
 }
 
 .input_text:hover,
@@ -55,5 +57,5 @@
 }
 
 .transparent-btn {
-  opacity: 0.5; /* Полупрозрачность */
+  opacity: 0.5;
 }
