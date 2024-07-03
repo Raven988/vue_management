@@ -3,7 +3,7 @@
     <h2 class="lable">Личная карточка</h2>
     <div class="form-container">
       <div :class="['photo', { error: errors.photo }]">
-        <img :src="imageUrl" v-if="imageUrl" class="preview" />
+        <div class="preview"><img :src="imageUrl" v-if="imageUrl" /></div>
         <input type="file" @change="onFileChange" class="file-input" />
       </div>
       <div :class="['form-group', { error: errors.last_name }]">
@@ -49,7 +49,7 @@ const router = useRouter()
 
 const departments = inject('departments')
 
-const imageUrl = ref('/src/assets/image/non_photo.png')
+const imageUrl = ref('')
 const errors = ref({})
 
 const props = defineProps({

@@ -10,6 +10,7 @@
   align-items: center;
 }
 .preview {
+  background-image: url('/src/assets/image/non_photo.png');
   height: 300px;
   width: 300px;
   border: 1px solid black;
