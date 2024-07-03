@@ -9,7 +9,7 @@
         </div>
         <div v-if="route.params.type_and_id.includes('students')" class="mid_table">
           <table>
-            <thead>
+            <thead class="custom-header">
               <tr>
                 <th>Предмет</th>
                 <th>Оценка</th>
@@ -61,15 +61,18 @@
 </template>
 
 <script setup>
-import '../assets/styles/card.css'
 import { ref, inject, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 
+const API_BASE_URL = 'http://127.0.0.1:8000'
+
 const router = useRouter()
 const route = useRoute()
+
 const personData = inject('personData')
 const availableGrades = inject('availableGrades')
+
 const studentGrades = ref([])
 const birthDateInput = ref(null)
 const imageSrc = ref(null)
@@ -78,9 +81,7 @@ const errors = ref({})
 async function fetchGrades() {
   if (route.params.type_and_id.includes('students')) {
     try {
-      const personResponse = await axios.get(
-        `http://127.0.0.1:8000/${route.params.type_and_id}/grades`
-      )
+      const personResponse = await axios.get(`${API_BASE_URL}/${route.params.type_and_id}/grades`)
       studentGrades.value = personResponse.data
     } catch (error) {
       console.error(error)
@@ -127,13 +128,13 @@ async function submitForm() {
     grades: studentGrades.value
   }
   try {
-    await axios.put(`http://127.0.0.1:8000/${route.params.type_and_id}`, payloadPerson, {
+    await axios.put(`${API_BASE_URL}/${route.params.type_and_id}`, payloadPerson, {
       headers: {
         'Content-Type': 'application/json'
       }
     })
     if (route.params.type_and_id.includes('students')) {
-      await axios.put(`http://127.0.0.1:8000/${route.params.type_and_id}/grades`, payloadGrades, {
+      await axios.put(`${API_BASE_URL}/${route.params.type_and_id}/grades`, payloadGrades, {
         headers: {
           'Content-Type': 'application/json'
         }

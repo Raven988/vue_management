@@ -21,7 +21,3 @@
     </main>
   </div>
 </template>
-
-<script>
-import '../assets/styles/home.css'
-</script>

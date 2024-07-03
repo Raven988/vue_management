@@ -17,11 +17,18 @@
 </template>
 
 <script setup>
-import '../assets/styles/header.css'
 import { useRouter } from 'vue-router'
 import { defineProps, ref, toRaw } from 'vue'
 import axios from 'axios'
 import MainTable from './MainTable.vue'
+
+const API_BASE_URL = 'http://127.0.0.1:8000'
+
+const router = useRouter()
+
+const isButtonActive = ref(true)
+const main_table = ref(null)
+const searchQuery = ref('')
 
 const props = defineProps({
   type: String,
@@ -29,15 +36,10 @@ const props = defineProps({
   del: String
 })
 
-const router = useRouter()
-const isButtonActive = ref(true)
-const main_table = ref(null)
-const searchQuery = ref('')
-
 async function deletePerson() {
   const rawData = toRaw(main_table.value.selectedItems)
   const ids = rawData.map((item) => item.id)
-  const deleteRequests = ids.map((id) => axios.delete(`http://127.0.0.1:8000/${props.type}/${id}`))
+  const deleteRequests = ids.map((id) => axios.delete(`${API_BASE_URL}/${props.type}/${id}`))
   try {
     await Promise.all(deleteRequests)
     await main_table.value.fetchPersonsData(props.type)

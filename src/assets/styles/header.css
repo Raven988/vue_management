@@ -13,7 +13,7 @@
   margin-left: 64px;
   margin-top: 70px;
   transition: transform 0.2s ease-in-out;
-  border: 0px solid black;
+  border: none;
   box-shadow: 0 0 10px #494848;
 }
 .header-button {
@@ -31,7 +31,7 @@
   cursor: pointer;
   border-radius: 10px;
   color: white;
-  border: 0px solid black;
+  border: none;
   box-shadow: 0 0 10px #494848;
   transition: transform 0.2s ease-in-out;
 }

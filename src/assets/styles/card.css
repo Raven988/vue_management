@@ -28,9 +28,11 @@
 }
 .form-input {
   flex: 2;
-  padding: 5px;
+  padding: 10px;
   font-size: 16px;
   border-radius: 10px;
+  border: none;
+  box-shadow: 0 0 10px #494848;
 }
 .form-btn {
   margin: 20px;

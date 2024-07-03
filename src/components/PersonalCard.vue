@@ -39,14 +39,18 @@
 </template>
 
 <script setup>
-import '../assets/styles/card.css'
 import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
+const API_BASE_URL = 'http://127.0.0.1:8000'
+
 const router = useRouter()
+
 const departments = inject('departments')
+
 const imageUrl = ref('/src/assets/image/non_photo.png')
+const errors = ref({})
 
 const props = defineProps({
   type: String
@@ -74,8 +78,6 @@ function onFileChange(event) {
   }
 }
 
-const errors = ref({})
-
 function validateForm() {
   errors.value = {
     photo: !person.value.photo,
@@ -99,7 +101,7 @@ async function submitForm() {
     photo: person.value.photo
   }
   try {
-    await axios.post(`http://127.0.0.1:8000/${props.type}/`, payload, {
+    await axios.post(`${API_BASE_URL}/${props.type}/`, payload, {
       headers: {
         'Content-Type': 'application/json'
       }

@@ -42,12 +42,13 @@
 
 .input_text {
   height: 33px;
-  width: 180px;
+  width: 185px;
   border-radius: 10px;
   float: right;
   margin-top: 4px;
   transition: transform 0.2s ease-in-out;
   box-shadow: 0 0 10px #494848;
+  border: none;
 }
 
 .input_text:hover,

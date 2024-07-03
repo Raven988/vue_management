@@ -47,13 +47,17 @@
 </template>
 
 <script setup>
-import '../assets/styles/sidebar.css'
 import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 const departments = inject('departments')
+const fetchPersonsData = inject('fetchPersonsData')
+
+const selectedDepartments = ref([])
+const firstName = ref('')
+const lastName = ref('')
 
 const filters = ref({
   instructors: false,
@@ -74,6 +78,7 @@ function toggleFilter(filterId) {
   }
   filters.value[filterId] = !filters.value[filterId]
 }
+
 function clearFilters() {
   filters.value.department = false
   filters.value.group = false
@@ -82,10 +87,6 @@ function clearFilters() {
   lastName.value = ''
 }
 
-const selectedDepartments = ref([])
-const firstName = ref('')
-const lastName = ref('')
-const fetchPersonsData = inject('fetchPersonsData')
 function filterPersons(filterId) {
   const query = {
     departments: selectedDepartments.value,

@@ -36,18 +36,18 @@
 </template>
 
 <script setup>
-import '../assets/styles/table.css'
 import { ref, onMounted, watch, inject, computed } from 'vue'
+
+const persons = inject('persons')
+const fetchPersonsData = inject('fetchPersonsData')
+const getPerson = inject('getPerson')
+
+const selectedItems = ref([])
 
 const props = defineProps({
   type: String,
   searchQuery: String
 })
-
-const persons = inject('persons')
-const fetchPersonsData = inject('fetchPersonsData')
-
-const selectedItems = ref([])
 
 defineExpose({ selectedItems, fetchPersonsData })
 
@@ -58,19 +58,6 @@ function updateSelectedItems() {
   emit('selectionChanged', selectedItems.value.length === 0)
 }
 
-watch(
-  () => props.type,
-  (newType) => {
-    fetchPersonsData(newType)
-    emit('selectionChanged', true)
-  }
-)
-
-onMounted(() => {
-  fetchPersonsData(props.type)
-})
-
-const getPerson = inject('getPerson')
 function handleRowClick(person) {
   getPerson(`${props.type}/${person.id}`, `${props.type}`)
 }
@@ -87,5 +74,17 @@ const filteredPersons = computed(() => {
       (person.group_name && person.group_name.toLowerCase().includes(searchString))
     )
   })
+})
+
+watch(
+  () => props.type,
+  (newType) => {
+    fetchPersonsData(newType)
+    emit('selectionChanged', true)
+  }
+)
+
+onMounted(() => {
+  fetchPersonsData(props.type)
 })
 </script>
